@@ -1,0 +1,4 @@
+greentoads: 
+  '*greentoads.net':
+    - servers
+
