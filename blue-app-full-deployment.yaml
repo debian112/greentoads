@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-app
+  namespace: rainbow-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blue-app-pods
+      lbsvc: rainbow-apps
+  template:
+    metadata:
+      labels:
+        app: blue-app-pods
+        lbsvc: rainbow-apps
+    spec:
+      containers:
+      - name: blue-con
+        image: brandondevregistry.azurecr.io/blue-app:v1
+      imagePullSecrets:
+      - name: acr-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-blue-app
+  namespace: rainbow-demo
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: blue-app-pods
+  sessionAffinity: None
+  type: ClusterIP
